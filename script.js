@@ -12,6 +12,8 @@ let companyBMarketCap = 150; // in billions
 let score = 0; // Initialize the score
 let level = 1; // Initialize the level
 let streak = 0; // Initialize the streak
+let timeLeft = 10; // Time in seconds
+let timerInterval; // To store the interval function
 
 
 // Function to get a random company based on the current difficulty level
@@ -36,8 +38,10 @@ function setNewCompanies() {
     document.getElementById("companyBMarketCap").textContent = `$${companyBMarketCap} billion`;
 }
 
+
 // Function to check the user's guess and update the score and level
 function checkGuess(guess) {
+    clearInterval(timerInterval);
     const isCorrect = (guess === "higher" && companyAMarketCap < companyBMarketCap) || 
                       (guess === "lower" && companyAMarketCap > companyBMarketCap);
 
@@ -54,7 +58,31 @@ function checkGuess(guess) {
     document.getElementById("score").textContent = score;
     document.getElementById("streak").textContent = streak;  // Update the streak display
     setNewCompanies();
+    startTimer();
 }
+
+function startTimer() {
+    // Reset the timer
+    timeLeft = 10;
+    document.getElementById("timer").textContent = timeLeft;
+
+    // Clear any existing timer intervals
+    clearInterval(timerInterval);
+
+    // Start the timer
+    timerInterval = setInterval(function() {
+        timeLeft--;
+        document.getElementById("timer").textContent = timeLeft;
+
+        // Time's up
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            document.getElementById("result").textContent = "Time's up! Incorrect. Try again!";
+            setNewCompanies(); // Set new companies for the next round
+        }
+    }, 1000);
+}
+
 
 
 // Set initial companies when the page loads
