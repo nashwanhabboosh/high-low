@@ -11,6 +11,8 @@ let companyAMarketCap = 100; // in billions
 let companyBMarketCap = 150; // in billions
 let score = 0; // Initialize the score
 let level = 1; // Initialize the level
+let streak = 0; // Initialize the streak
+
 
 // Function to get a random company based on the current difficulty level
 function getRandomCompany(difficulty) {
