@@ -45,13 +45,17 @@ function checkGuess(guess) {
         document.getElementById("result").textContent = "Correct!";
         score++;
         level++;
+        streak++;  // Increase the streak for a correct guess
     } else {
         document.getElementById("result").textContent = "Incorrect. Try again!";
+        streak = 0;  // Reset the streak to zero for an incorrect guess
     }
 
     document.getElementById("score").textContent = score;
+    document.getElementById("streak").textContent = streak;  // Update the streak display
     setNewCompanies();
 }
+
 
 // Set initial companies when the page loads
 setNewCompanies();
