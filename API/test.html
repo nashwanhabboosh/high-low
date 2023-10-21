@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Alpha Vantage API Example</title>
+</head>
+<body>
+    <h1>Real-Time Stock Quote</h1>
+    <p>Enter a stock symbol (e.g., AAPL): <input type="text" id="stockSymbol"></p>
+    <button onclick="getStockQuote()">Get Quote</button>
+    <div id="quoteResult"></div>
+
+    <script>
+        const apiKey = 'YOUR_API_KEY';
+
+        function getStockQuote() {
+            const stockSymbol = document.getElementById('stockSymbol').value;
+            const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${stockSymbol}&interval=5min&apikey=${apiKey}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data['Time Series (5min)']) {
+                        // Extract the latest stock quote
+                        const timeSeries = data['Time Series (5min)'];
+                        const latestTime = Object.keys(timeSeries)[0];
+                        const latestQuote = timeSeries[latestTime];
+                        
+                        // Display the quote
+                        const quoteResult = document.getElementById('quoteResult');
+                        quoteResult.innerHTML = `
+                            <p>Stock Symbol: ${stockSymbol}</p>
+                            <p>Latest Time: ${latestTime}</p>
+                            <p>Open: ${latestQuote['1. open']}</p>
+                            <p>High: ${latestQuote['2. high']}</p>
+                            <p>Low: ${latestQuote['3. low']}</p>
+                            <p>Close: ${latestQuote['4. close']}</p>
+                            <p>Volume: ${latestQuote['5. volume']}</p>
+                        `;
+                    } else {
+                        // Display an error message
+                        const quoteResult = document.getElementById('quoteResult');
+                        quoteResult.textContent = 'Error fetching stock quote. Please check the symbol and try again.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
