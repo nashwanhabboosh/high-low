@@ -2,43 +2,12 @@
 <html>
 <head>
     <title>Market Cap Guessing Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f3f3f3;
-        }
-        #container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-        h1 {
-            color: #333;
-        }
-        p {
-            margin: 0;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
 </head>
 <body>
     <div id="container">
         <h1>Market Cap Guessing Game</h1>
-        <p>Score: <span id="score">0</span></p>
+        <p>Player 1 Score: <span id="player1Score">0</span></p>
+        <p>Player 2 Score: <span id="player2Score">0</span></p>
         <p>Time left: <span id="timer">10</span> seconds</p>
         <p>Is the market cap of Company A higher or lower than Company B?</p>
         <p>Company A Market Cap: <span id="companyAMarketCap">$100 billion</span></p>
@@ -48,24 +17,12 @@
         <p id="result"></p>
     </div>
 
-    <script>
-        // Dummy data for market caps (in real use, fetch data from an API)
-        const companyAMarketCap = 100; // in billions
-        const companyBMarketCap = 150; // in billions
+    <!-- Leaderboard -->
+    <div id="leaderboard">
+        <h2>Leaderboard</h2>
+        <ol id="highScores"></ol>
+    </div>
 
-        // Add event listeners to the buttons
-        document.getElementById("higherButton").addEventListener("click", () => checkGuess("higher"));
-        document.getElementById("lowerButton").addEventListener("click", () => checkGuess("lower"));
-
-        // Function to check the user's guess
-        function checkGuess(guess) {
-            if ((guess === "higher" && companyAMarketCap < companyBMarketCap) ||
-                (guess === "lower" && companyAMarketCap > companyBMarketCap)) {
-                document.getElementById("result").textContent = "Correct!";
-            } else {
-                document.getElementById("result").textContent = "Incorrect. Try again!";
-            }
-        }
-     <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

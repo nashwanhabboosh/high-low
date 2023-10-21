@@ -1,9 +1,9 @@
 // Dummy data for market caps
 const companies = [
-    {name: "Company A", marketCap: 100},
-    {name: "Company B", marketCap: 150},
-    {name: "Company C", marketCap: 200},
-    {name: "Company D", marketCap: 50},
+    { name: "Company A", marketCap: 100 },
+    { name: "Company B", marketCap: 150 },
+    { name: "Company C", marketCap: 200 },
+    { name: "Company D", marketCap: 50 }
     // Add more companies as needed
 ];
 
@@ -14,6 +14,51 @@ let level = 1; // Initialize the level
 let streak = 0; // Initialize the streak
 let timeLeft = 10; // Time in seconds
 let timerInterval; // To store the interval function
+
+// Additional variables for local multiplayer
+let currentPlayer = 1;
+const player1Score = document.getElementById("player1Score");
+const player2Score = document.getElementById("player2Score");
+
+// Function to toggle between players
+function togglePlayers() {
+    if (currentPlayer === 1) {
+        currentPlayer = 2;
+        player1Score.style.fontWeight = "normal";
+        player2Score.style.fontWeight = "bold";
+    } else {
+        currentPlayer = 1;
+        player1Score.style.fontWeight = "bold";
+        player2Score.style.fontWeight = "normal";
+    }
+}
+
+// ... Your existing functions ...
+
+// Function to check the user's guess and update the score
+function checkGuess(guess) {
+    clearInterval(timerInterval);
+    const isCorrect = (guess === "higher" && companyAMarketCap < companyBMarketCap) ||
+        (guess === "lower" && companyAMarketCap > companyBMarketCap);
+
+    if (isCorrect) {
+        document.getElementById("result").textContent = "Correct!";
+        if (currentPlayer === 1) {
+            player1Score.textContent = parseInt(player1Score.textContent) + 1;
+        } else {
+            player2Score.textContent = parseInt(player2Score.textContent) + 1;
+        }
+        streak++;  // Increase the streak for a correct guess
+    } else {
+        document.getElementById("result").textContent = "Incorrect. Try again!";
+        streak = 0;  // Reset the streak to zero for an incorrect guess
+    }
+
+    togglePlayers(); // Toggle to the other player
+    setNewCompanies();
+    startTimer();
+}
+
 
 
 // Function to get a random company based on the current difficulty level
