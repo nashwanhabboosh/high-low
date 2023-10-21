@@ -9,31 +9,25 @@ const companies = [
 
 let companyAMarketCap = 100; // in billions
 let companyBMarketCap = 150; // in billions
-let score = 0; // Initialize the score
-let level = 1; // Initialize the level
-let streak = 0; // Initialize the streak
+let score = [0, 0, 0, 0]; // Initialize scores for 4 players
 let timeLeft = 10; // Time in seconds
 let timerInterval; // To store the interval function
-
-// Additional variables for local multiplayer
-let currentPlayer = 1;
-const player1Score = document.getElementById("player1Score");
-const player2Score = document.getElementById("player2Score");
+let currentPlayer = 1; // Initialize to player 1
 
 // Function to toggle between players
 function togglePlayers() {
-    if (currentPlayer === 1) {
-        currentPlayer = 2;
-        player1Score.style.fontWeight = "normal";
-        player2Score.style.fontWeight = "bold";
-    } else {
-        currentPlayer = 1;
-        player1Score.style.fontWeight = "bold";
-        player2Score.style.fontWeight = "normal";
+    currentPlayer = (currentPlayer % 4) + 1;
+    // Update the display to highlight the current player
+    for (let i = 1; i <= 4; i++) {
+        const playerScore = document.getElementById(`player${i}Score`);
+        if (i === currentPlayer) {
+            playerScore.style.fontWeight = "bold";
+        } else {
+            playerScore.style.fontWeight = "normal";
+        }
     }
 }
 
-// ... Your existing functions ...
 
 // Function to check the user's guess and update the score
 function checkGuess(guess) {
@@ -43,96 +37,15 @@ function checkGuess(guess) {
 
     if (isCorrect) {
         document.getElementById("result").textContent = "Correct!";
-        if (currentPlayer === 1) {
-            player1Score.textContent = parseInt(player1Score.textContent) + 1;
-        } else {
-            player2Score.textContent = parseInt(player2Score.textContent) + 1;
-        }
+        score[currentPlayer - 1]++;
         streak++;  // Increase the streak for a correct guess
     } else {
         document.getElementById("result").textContent = "Incorrect. Try again!";
         streak = 0;  // Reset the streak to zero for an incorrect guess
     }
 
-    togglePlayers(); // Toggle to the other player
+    togglePlayers(); // Toggle to the next player
     setNewCompanies();
     startTimer();
 }
 
-
-
-// Function to get a random company based on the current difficulty level
-function getRandomCompany(difficulty) {
-    let filteredCompanies = companies.filter(company => company.marketCap <= difficulty);
-    return filteredCompanies[Math.floor(Math.random() * filteredCompanies.length)];
-}
-
-// Function to set new companies for the game round
-function setNewCompanies() {
-    const difficulty = 200 - (level * 10);
-    const companyAData = getRandomCompany(difficulty);
-    let companyBData = getRandomCompany(difficulty);
-    while (companyAData === companyBData) {
-        companyBData = getRandomCompany(difficulty);
-    }
-
-    companyAMarketCap = companyAData.marketCap;
-    companyBMarketCap = companyBData.marketCap;
-
-    document.getElementById("companyAMarketCap").textContent = `$${companyAMarketCap} billion`;
-    document.getElementById("companyBMarketCap").textContent = `$${companyBMarketCap} billion`;
-}
-
-
-// Function to check the user's guess and update the score and level
-function checkGuess(guess) {
-    clearInterval(timerInterval);
-    const isCorrect = (guess === "higher" && companyAMarketCap < companyBMarketCap) || 
-                      (guess === "lower" && companyAMarketCap > companyBMarketCap);
-
-    if (isCorrect) {
-        document.getElementById("result").textContent = "Correct!";
-        score++;
-        level++;
-        streak++;  // Increase the streak for a correct guess
-    } else {
-        document.getElementById("result").textContent = "Incorrect. Try again!";
-        streak = 0;  // Reset the streak to zero for an incorrect guess
-    }
-
-    document.getElementById("score").textContent = score;
-    document.getElementById("streak").textContent = streak;  // Update the streak display
-    setNewCompanies();
-    startTimer();
-}
-
-function startTimer() {
-    // Reset the timer
-    timeLeft = 10;
-    document.getElementById("timer").textContent = timeLeft;
-
-    // Clear any existing timer intervals
-    clearInterval(timerInterval);
-
-    // Start the timer
-    timerInterval = setInterval(function() {
-        timeLeft--;
-        document.getElementById("timer").textContent = timeLeft;
-
-        // Time's up
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            document.getElementById("result").textContent = "Time's up! Incorrect. Try again!";
-            setNewCompanies(); // Set new companies for the next round
-        }
-    }, 1000);
-}
-
-
-
-// Set initial companies when the page loads
-setNewCompanies();
-
-// Attach event listeners to the buttons
-document.getElementById("higherButton").addEventListener("click", () => checkGuess("higher"));
-document.getElementById("lowerButton").addEventListener("click", () => checkGuess("lower"));
