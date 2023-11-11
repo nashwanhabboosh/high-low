@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High Low</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>High Low</h1>
+  <p>Select a game mode:</p>
+
+  <button onclick="startGame('standard')">Standard Mode</button>
+  <button onclick="startGame('timed')">Timed Mode</button>
+
+  <script>
+    function startGame(mode) {
+      // Simulate incorrect guess by setting mode to 'losing'
+      if (mode === 'losing') {
+        window.location.href = 'losing.html';
+      } else {
+        console.log("Selected mode: " + mode);
+        setTimeout(() => {
+          startGame('losing');
+        }, 3000);
+      }
+    }
+  </script>
+
+</body>
+</html>
