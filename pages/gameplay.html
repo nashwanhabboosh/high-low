@@ -3,6 +3,17 @@
     let timeLeft = 10;
     const timerElement = document.getElementById("timer");
     const scoreElement = document.getElementById("score");
+
+    const stockTicker = getRandomCompany();
+
+    getCompanyLogo(stockTicker)
+    .then(logoUrl => {
+        console.log(`Company Logo URL: ${logoUrl}`);
+    })
+    .catch(error => {
+        console.error('Error:', error.message);
+    });
+
     
     // Function to update the score and timer
     function updateScoreAndTimer(result) {
