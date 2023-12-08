@@ -50,8 +50,10 @@
 
     <script>
         // Dummy data for market caps (in real use, fetch data from an API)
-        const companyAMarketCap = 100; // in billions
-        const companyBMarketCap = 150; // in billions
+        let companyAMarketCap = 100; // in billions
+        let companyBMarketCap = 150; // in billions
+        let score = 0;
+        let timeLeft = 10;
 
         // Add event listeners to the buttons
         document.getElementById("higherButton").addEventListener("click", () => checkGuess("higher"));
@@ -62,10 +64,51 @@
             if ((guess === "higher" && companyAMarketCap < companyBMarketCap) ||
                 (guess === "lower" && companyAMarketCap > companyBMarketCap)) {
                 document.getElementById("result").textContent = "Correct!";
+                score++;
             } else {
                 document.getElementById("result").textContent = "Incorrect. Try again!";
             }
+
+            // Update the score and reset the timer
+            document.getElementById("score").textContent = score;
+            resetGame();
         }
-     <script src="script.js"></script>
+
+        // Function to reset the game
+        function resetGame() {
+            // Generate new random market cap values
+            companyAMarketCap = Math.floor(Math.random() * 200) + 50; // Random value between 50 and 249 billion
+            companyBMarketCap = Math.floor(Math.random() * 200) + 50; // Random value between 50 and 249 billion
+
+            // Reset the timer and display the new market cap values
+            document.getElementById("companyAMarketCap").textContent = "$" + companyAMarketCap + " billion";
+            document.getElementById("companyBMarketCap").textContent = "$" + companyBMarketCap + " billion";
+
+            // Reset the timer
+            timeLeft = 10;
+            updateTimer();
+
+            // Clear the result message
+            document.getElementById("result").textContent = "";
+        }
+
+        // Function to update the timer
+        function updateTimer() {
+            document.getElementById("timer").textContent = timeLeft;
+            if (timeLeft === 0) {
+                // If time runs out, reset the game
+                resetGame();
+            } else {
+                // Decrement the timer and call updateTimer again after 1 second
+                setTimeout(() => {
+                    timeLeft--;
+                    updateTimer();
+                }, 1000);
+            }
+        }
+
+        // Initial start of the timer
+        updateTimer();
+    </script>
 </body>
 </html>
