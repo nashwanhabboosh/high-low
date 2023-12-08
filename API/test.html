@@ -7,10 +7,14 @@
     <h1>Real-Time Stock Quote</h1>
     <p>Enter a stock symbol (e.g., AAPL): <input type="text" id="stockSymbol"></p>
     <button onclick="getStockQuote()">Get Quote</button>
+    <button onclick="clearHistory()">Clear History</button>
     <div id="quoteResult"></div>
+    <h2>Search History</h2>
+    <ul id="searchHistory"></ul>
 
     <script>
         const apiKey = 'NH1S3G338R9GTMX0';
+        let history = [];
 
         function getStockQuote() {
             const stockSymbol = document.getElementById('stockSymbol').value;
@@ -24,7 +28,7 @@
                         const timeSeries = data['Time Series (5min)'];
                         const latestTime = Object.keys(timeSeries)[0];
                         const latestQuote = timeSeries[latestTime];
-                        
+
                         // Display the quote
                         const quoteResult = document.getElementById('quoteResult');
                         quoteResult.innerHTML = `
@@ -36,6 +40,10 @@
                             <p>Close: ${latestQuote['4. close']}</p>
                             <p>Volume: ${latestQuote['5. volume']}</p>
                         `;
+
+                        // Add to history and update display
+                        addToHistory(stockSymbol);
+                        updateHistoryDisplay();
                     } else {
                         // Display an error message
                         const quoteResult = document.getElementById('quoteResult');
@@ -45,6 +53,22 @@
                 .catch(error => {
                     console.error('Error:', error);
                 });
+        }
+
+        function addToHistory(symbol) {
+            if (!history.includes(symbol)) {
+                history.push(symbol);
+            }
+        }
+
+        function updateHistoryDisplay() {
+            const historyElement = document.getElementById('searchHistory');
+            historyElement.innerHTML = history.map(symbol => `<li>${symbol}</li>`).join('');
+        }
+
+        function clearHistory() {
+            history = [];
+            updateHistoryDisplay();
         }
     </script>
 </body>
